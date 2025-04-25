@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Float, ForeignKey
 from app.core.database import Base
-
+from sqlalchemy.orm import relationship
 class DetalleOrden(Base):
     __tablename__ = "detalle_orden"
 
@@ -10,3 +10,5 @@ class DetalleOrden(Base):
     cantidad = Column(Integer, nullable=False)
     precio_unitario = Column(Float, nullable=False)
     subtotal = Column(Float, nullable=False)
+
+    orden = relationship("Orden", back_populates="detalles")

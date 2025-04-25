@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.schemas.orden import OrdenCreate, OrdenOut
 from app.core.database import SessionLocal
@@ -48,3 +48,17 @@ def crear_orden(orden: OrdenCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(nueva_orden)
     return nueva_orden
+
+@router.get("/", response_model=list[OrdenOut])
+def listar_ordenes(db: Session = Depends(get_db)):
+    ordenes = db.query(model_orden.Orden).all()
+    for orden in ordenes:
+        orden.detalles 
+    return ordenes
+
+@router.get("/{orden_id}", response_model=OrdenOut)
+def obtener_orden(orden_id: int, db: Session = Depends(get_db)):
+    orden = db.query(model_orden.Orden).filter(model_orden.Orden.id == orden_id).first()
+    if not orden:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Orden no encontrada")
+    return orden
