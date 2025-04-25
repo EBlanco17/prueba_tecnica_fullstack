@@ -1,0 +1,40 @@
+# Entornos virtuales
+env/
+venv/
+ENV/
+.venv/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración sensibles
+.env
+
+# Pycache
+__pycache__/
+*.py[cod]
+
+# Archivos de migración (si usas alembic más adelante)
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+
+# Archivos de compilación
+*.log
+*.sqlite3
+*.pdf
+
+# Archivos del IDE/editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Pruebas
+coverage/
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Archivos de tipo notebook
+.ipynb_checkpoints/
