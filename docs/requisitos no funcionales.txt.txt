@@ -1,0 +1,9 @@
+REQUISITOS NO FUNCIONALES
+
+1. Usabilidad: la interfaz debe ser simple e intuitiva.
+2. Seguridad: evitar inyecciones SQL y validar inputs en backend.
+3. Documentación clara del código (docstrings).
+4. Estructura modular y limpia del backend.
+5. Base de datos normalizada con claves foráneas y restricciones.
+6. Desempeño aceptable para 100+ registros.
+7. Generación de reportes PDF con diseño profesional y metadata (fecha).

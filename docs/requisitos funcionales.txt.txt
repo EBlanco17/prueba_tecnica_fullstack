@@ -1,0 +1,11 @@
+REQUISITOS FUNCIONALES
+
+1. Registrar una orden de compra que contenga múltiples productos.
+2. Calcular automáticamente subtotales y total de la orden.
+3. Validar los datos ingresados (precios, cantidades).
+4. Consultar el listado de órdenes registradas.
+5. Consultar el detalle de una orden específica.
+6. Actualizar órdenes existentes.
+7. Eliminar una orden.
+8. Ver el top 3 de productos más comprados.
+9. Generar un reporte PDF con el top 3 de productos más comprados.
