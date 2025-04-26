@@ -7,37 +7,64 @@
       body {
         font-family: Arial, sans-serif;
         margin: 2em;
+        background-color: #f9f9f9;
+        color: #333;
       }
       h1 {
         text-align: center;
+        color: #4caf50;
+        margin-bottom: 1em;
+      }
+      .fecha {
+        text-align: center;
+        font-size: 0.9em;
+        color: #555;
+        margin-bottom: 1em;
       }
       table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 1em;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
-      th,
-      td {
-        border: 1px solid #ccc;
+      th {
+        background-color: #4caf50;
+        color: white;
         padding: 10px;
         text-align: left;
       }
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
       footer {
         text-align: center;
-        font-size: 0.8em;
+        font-size: 0.9em;
         margin-top: 2em;
-        color: #888;
+        color: #555;
+      }
+      .footer-info {
+        margin-top: 1em;
+        font-size: 0.8em;
+        color: #777;
       }
     </style>
   </head>
   <body>
-    <h1>Top 3 Productos Más Comprados</h1>
+    <h1>Reporte: Top 3 Productos Más Comprados</h1>
+    <p class="fecha">Fecha de generación: {{ fecha }}</p>
     <table>
       <thead>
         <tr>
           <th>Nombre</th>
           <th>Cantidad Total Comprada</th>
           <th>Precio Unitario</th>
+          <th>Subtotal</th>
         </tr>
       </thead>
       <tbody>
@@ -46,10 +73,24 @@
           <td>{{ p.nombre }}</td>
           <td>{{ p.total_comprado }}</td>
           <td>${{ "%.2f"|format(p.precio_unitario) }}</td>
+          <td>${{ "%.2f"|format(p.total_comprado * p.precio_unitario) }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <footer>Generado el {{ fecha }}</footer>
+    <h3>Total Vendido: {{ total_vendido }}</h3>
+    <h3>Precio Total: ${{ "%.2f"|format(precio_total) }}</h3>
+    <footer>
+      <p>
+        Reporte generado automáticamente por el sistema de análisis de ventas.
+      </p>
+      <p class="footer-info">
+        © 2025 Empresa S.A. | Todos los derechos reservados.
+      </p>
+      <p class="footer-info">
+        Para más información, visite nuestro sitio web:
+        <a href="https://www.empresa.com">www.empresa.com</a>
+      </p>
+    </footer>
   </body>
 </html>

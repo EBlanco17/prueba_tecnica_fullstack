@@ -1,11 +1,11 @@
 from typing import Generator, List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func  
 from app.core.database import SessionLocal
 from app.models.producto import Producto
-from app.models.detalle_orden import DetalleOrden
-from app.schemas.producto import ProductoTopOut
+from app.models.detalle_orden import DetalleOrden 
+from app.schemas.producto import ProductoOut, ProductoTopOut
 from fastapi.responses import FileResponse
 from app.pdf.generate_pdf import generar_reporte_pdf
 
@@ -18,14 +18,14 @@ def get_db() -> Generator[Session, None, None]:
     finally:
         db.close()
 
-@router.get("/")
-def obtener_productos(db: Session = Depends(get_db)) -> List[Producto]:
+@router.get("/", response_model=List[ProductoOut])
+def obtener_productos(db: Session = Depends(get_db)) -> List[ProductoOut]:
     productos: List[Producto] = db.query(Producto).all()
-    return productos
+    return [ProductoOut.from_orm(producto) for producto in productos]
 
 @router.get("/top3", response_model=List[ProductoTopOut])
 def obtener_top_3(db: Session = Depends(get_db)) -> List[ProductoTopOut]:
-    resultados: List[ProductoTopOut] = (
+    resultados = (
         db.query(
             Producto.nombre.label("nombre"),
             func.sum(DetalleOrden.cantidad).label("total_comprado")
@@ -36,7 +36,7 @@ def obtener_top_3(db: Session = Depends(get_db)) -> List[ProductoTopOut]:
         .limit(3)
         .all()
     )
-    return resultados
+    return [ProductoTopOut(nombre=r.nombre, total_comprado=r.total_comprado) for r in resultados]
 
 @router.get("/top3/pdf", response_class=FileResponse)
 def descargar_pdf_top3(db: Session = Depends(get_db)) -> FileResponse:
