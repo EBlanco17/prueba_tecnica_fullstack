@@ -2,9 +2,9 @@ fastapi
 uvicorn
 sqlalchemy
 pymysql
+cryptography
 python-dotenv
-pydantic[dotenv]
 jinja2
-weasyprint
+pdfkit
 pytest
 httpx

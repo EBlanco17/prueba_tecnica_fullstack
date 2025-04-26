@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reporte Top 3 Productos</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2em;
+      }
+      h1 {
+        text-align: center;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1em;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+      }
+      footer {
+        text-align: center;
+        font-size: 0.8em;
+        margin-top: 2em;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Top 3 Productos Más Comprados</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Cantidad Total Comprada</th>
+          <th>Precio Unitario</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in productos %}
+        <tr>
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.total_comprado }}</td>
+          <td>${{ "%.2f"|format(p.precio_unitario) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <footer>Generado el {{ fecha }}</footer>
+  </body>
+</html>
