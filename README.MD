@@ -83,7 +83,10 @@ git clone https://github.com/EBlanco17/prueba_tecnica_fullstack.git
   sqlalchemy, pymysql, python-dotenv, jinja2, pdfkit.
 - **Base de datos**: MySql.
 - **Pruebas**: pytest.
-- **Documentación**: Swagger para la API RESTful y TypeDoc para el frontend.
+- **Documentación**: Swagger para la API RESTful y **TypeDoc para el frontend con TypeScript**.
+- **Control de versiones**: Git y GitHub para el manejo del código fuente.
+- **Entorno de desarrollo**: Visual Studio Code.
+- **Sistema de gestión de base de datos**: MySQL Workbench para la administración de la base de datos.
 
 ---
 

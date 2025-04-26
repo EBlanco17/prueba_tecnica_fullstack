@@ -53,6 +53,17 @@ El proyecto estará disponible en `http://localhost:3000`.
 ├── package.json     # Configuración del proyecto
 ```
 
+## Documentación
+
+- **TypeDoc**: Genera documentación para el código TypeScript. Puedes ejecutarlo con:
+
+```bash
+npm run doc
+```
+
+Se generará la documentación en la carpeta `docs`.
+Y puedes abrir el archivo `index.html` en un navegador para ver la documentación generada.
+
 ## Notas Adicionales
 
 - Asegúrate de tener instalada la versión correcta de Node.js antes de comenzar.

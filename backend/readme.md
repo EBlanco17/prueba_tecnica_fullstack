@@ -5,7 +5,7 @@
 Para clonar este proyecto, ejecuta el siguiente comando en tu terminal:
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/EBlanco17/prueba_tecnica_fullstack.git
 cd backend
 ```
 
