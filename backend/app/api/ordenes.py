@@ -62,3 +62,19 @@ def obtener_orden(orden_id: int, db: Session = Depends(get_db)):
     if not orden:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Orden no encontrada")
     return orden
+
+@router.delete("/{orden_id}", status_code=204)
+def eliminar_orden(orden_id: int, db: Session = Depends(get_db)):
+    orden = db.query(model_orden.Orden).filter(model_orden.Orden.id == orden_id).first()
+    if not orden:
+        raise HTTPException(status_code=404, detail="Orden no encontrada")
+
+    for detalle in orden.detalles:
+        producto = db.query(model_producto.Producto).filter(model_producto.Producto.id == detalle.producto_id).first()
+        if producto:
+            producto.cantidad_disponible += detalle.cantidad
+
+    db.delete(orden)
+    db.commit()
+    return
+
