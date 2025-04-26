@@ -13,3 +13,7 @@ class ProductoOut(ProductoBase):
 
 class Config:
     orm_mode = True
+
+class ProductoTopOut(BaseModel):
+    nombre: str
+    total_comprado: int
