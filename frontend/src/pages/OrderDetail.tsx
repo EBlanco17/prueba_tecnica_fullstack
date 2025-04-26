@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getOrderById, OrdenOut } from "../services/orderService";
+import { getOrderById, deleteOrder, OrdenOut } from "../services/orderService";
 
 /**
  * Vista para mostrar los detalles de una orden específica.
@@ -25,6 +25,26 @@ const OrderDetail: React.FC = () => {
 
     fetchOrder();
   }, [orderId]);
+
+  const handleDelete = async () => {
+    if (!orderId) return;
+
+    const confirmDelete = window.confirm(
+      "¿Estás seguro de que deseas borrar esta orden?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteOrder(Number(orderId));
+      alert("Orden borrada exitosamente");
+      navigate("/");
+    } catch (error) {
+      console.error("Error al borrar la orden:", error);
+      alert(
+        "Hubo un error al intentar borrar la orden. Por favor, inténtalo más tarde."
+      );
+    }
+  };
 
   if (!order) {
     return <p>Cargando detalles de la orden...</p>;
@@ -67,6 +87,12 @@ const OrderDetail: React.FC = () => {
         className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
       >
         Editar Orden
+      </button>
+      <button
+        onClick={handleDelete}
+        className="bg-red-500 text-white px-4 py-2 rounded mt-4 ml-4"
+      >
+        Borrar Orden
       </button>
       <button
         onClick={() => navigate("/")}
