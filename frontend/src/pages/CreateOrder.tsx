@@ -96,7 +96,7 @@ const CreateOrder: React.FC = () => {
     const updatedProducts = [...selectedProducts];
 
     if (field === "name") {
-      return;
+      return; // No permitir cambios en el nombre del producto
     }
 
     if (field === "quantity" && typeof value === "number") {
@@ -112,6 +112,14 @@ const CreateOrder: React.FC = () => {
 
       if (value < 1) {
         setError("La cantidad no puede ser menor que 1.");
+        return;
+      }
+    }
+
+    // Validar que el precio unitario no sea menor que 0
+    if (field === "price" && typeof value === "number") {
+      if (value < 0) {
+        setError("El precio unitario no puede ser menor que 0.");
         return;
       }
     }
