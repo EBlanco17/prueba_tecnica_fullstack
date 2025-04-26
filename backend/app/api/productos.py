@@ -1,3 +1,4 @@
+from typing import Generator, List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -8,23 +9,23 @@ from app.schemas.producto import ProductoTopOut
 from fastapi.responses import FileResponse
 from app.pdf.generate_pdf import generar_reporte_pdf
 
-router = APIRouter(prefix="/productos", tags=["Productos"])
+router: APIRouter = APIRouter(prefix="/productos", tags=["Productos"])
 
-def get_db():
-    db = SessionLocal()
+def get_db() -> Generator[Session, None, None]:
+    db: Session = SessionLocal()
     try:
         yield db
     finally:
         db.close()
 
 @router.get("/")
-def obtener_productos(db: Session = Depends(get_db)):
-    productos = db.query(Producto).all()
+def obtener_productos(db: Session = Depends(get_db)) -> List[Producto]:
+    productos: List[Producto] = db.query(Producto).all()
     return productos
 
-@router.get("/top3", response_model=list[ProductoTopOut])
-def obtener_top_3(db: Session = Depends(get_db)):
-    resultados = (
+@router.get("/top3", response_model=List[ProductoTopOut])
+def obtener_top_3(db: Session = Depends(get_db)) -> List[ProductoTopOut]:
+    resultados: List[ProductoTopOut] = (
         db.query(
             Producto.nombre.label("nombre"),
             func.sum(DetalleOrden.cantidad).label("total_comprado")
@@ -38,7 +39,7 @@ def obtener_top_3(db: Session = Depends(get_db)):
     return resultados
 
 @router.get("/top3/pdf", response_class=FileResponse)
-def descargar_pdf_top3(db: Session = Depends(get_db)):
+def descargar_pdf_top3(db: Session = Depends(get_db)) -> FileResponse:
     resultados = (
         db.query(
             Producto.nombre.label("nombre"),
@@ -52,7 +53,7 @@ def descargar_pdf_top3(db: Session = Depends(get_db)):
         .all()
     )
 
-    productos = [
+    productos: List[dict] = [
         {
             "nombre": r.nombre,
             "total_comprado": int(r.total_comprado),
@@ -60,5 +61,5 @@ def descargar_pdf_top3(db: Session = Depends(get_db)):
         } for r in resultados
     ]
 
-    pdf_path = generar_reporte_pdf(productos)
+    pdf_path: str = generar_reporte_pdf(productos)
     return FileResponse(pdf_path, media_type="application/pdf", filename="top3_productos.pdf")

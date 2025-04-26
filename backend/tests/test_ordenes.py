@@ -1,20 +1,21 @@
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy.orm import Session
 from app.main import app
 from app.core.database import SessionLocal
 from app.models import producto as model_producto
 from app.models import orden as model_orden
 from app.models import detalle_orden as model_detalle
 
-client = TestClient(app)
+client: TestClient = TestClient(app)
 
 @pytest.fixture
-def setup_db():
+def setup_db() -> None:
     """Fixture para configurar la base de datos antes de las pruebas."""
-    db = SessionLocal()
+    db: Session = SessionLocal()
     # Crear productos de prueba
-    producto1 = model_producto.Producto(id=1, nombre="Producto 1", cantidad_disponible=10, precio_unitario=100)
-    producto2 = model_producto.Producto(id=2, nombre="Producto 2", cantidad_disponible=5, precio_unitario=200)
+    producto1: model_producto.Producto = model_producto.Producto(id=1, nombre="Producto 1", cantidad_disponible=10, precio_unitario=100)
+    producto2: model_producto.Producto = model_producto.Producto(id=2, nombre="Producto 2", cantidad_disponible=5, precio_unitario=200)
     db.add(producto1)
     db.add(producto2)
     db.commit()
@@ -26,9 +27,9 @@ def setup_db():
     db.commit()
     db.close()
 
-def test_crear_orden(setup_db):
+def test_crear_orden(setup_db: None) -> None:
     """Prueba para crear una orden."""
-    payload = {
+    payload: dict = {
         "detalles": [
             {"producto_id": 1, "cantidad": 2},
             {"producto_id": 2, "cantidad": 1}
@@ -36,66 +37,66 @@ def test_crear_orden(setup_db):
     }
     response = client.post("/ordenes/", json=payload)
     assert response.status_code == 200
-    data = response.json()
+    data: dict = response.json()
     assert data["total"] == 400  # 2*100 + 1*200
     assert len(data["detalles"]) == 2
 
-def test_crear_orden_sin_productos():
+def test_crear_orden_sin_productos() -> None:
     """Prueba para crear una orden sin productos."""
-    payload = {"detalles": []}
+    payload: dict = {"detalles": []}
     response = client.post("/ordenes/", json=payload)
     assert response.status_code == 400
     assert response.json()["detail"] == "No se puede crear una orden sin productos."
 
-def test_obtener_orden(setup_db):
+def test_obtener_orden(setup_db: None) -> None:
     """Prueba para obtener una orden existente."""
     # Crear una orden primero
-    payload = {
+    payload: dict = {
         "detalles": [
             {"producto_id": 1, "cantidad": 1}
         ]
     }
     response = client.post("/ordenes/", json=payload)
-    orden_id = response.json()["id"]
+    orden_id: int = response.json()["id"]
 
     # Obtener la orden
     response = client.get(f"/ordenes/{orden_id}")
     assert response.status_code == 200
-    data = response.json()
+    data: dict = response.json()
     assert data["id"] == orden_id
 
-def test_actualizar_orden(setup_db):
+def test_actualizar_orden(setup_db: None) -> None:
     """Prueba para actualizar una orden existente."""
     # Crear una orden primero
-    payload = {
+    payload: dict = {
         "detalles": [
             {"producto_id": 1, "cantidad": 1}
         ]
     }
     response = client.post("/ordenes/", json=payload)
-    orden_id = response.json()["id"]
+    orden_id: int = response.json()["id"]
 
     # Actualizar la orden
-    update_payload = {
+    update_payload: dict = {
         "detalles": [
             {"producto_id": 2, "cantidad": 2}
         ]
     }
     response = client.put(f"/ordenes/{orden_id}", json=update_payload)
     assert response.status_code == 200
-    data = response.json()
+    data: dict = response.json()
     assert data["total"] == 400  # 2*200
 
-def test_eliminar_orden(setup_db):
+def test_eliminar_orden(setup_db: None) -> None:
     """Prueba para eliminar una orden existente."""
     # Crear una orden primero
-    payload = {
+    payload: dict = {
         "detalles": [
             {"producto_id": 1, "cantidad": 1}
         ]
     }
     response = client.post("/ordenes/", json=payload)
-    orden_id = response.json()["id"]
+    orden_id: int = response.json()["id"]
 
     # Eliminar la orden
     response = client.delete(f"/ordenes/{orden_id}")
