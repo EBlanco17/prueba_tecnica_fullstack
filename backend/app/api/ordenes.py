@@ -10,6 +10,13 @@ from app.models import producto as model_producto
 router: APIRouter = APIRouter(prefix="/ordenes", tags=["Ordenes"])
 
 def get_db() -> Generator[Session, None, None]:
+    """
+    Generador para obtener una sesión de base de datos.
+    Cierra la sesión automáticamente después de su uso.
+
+    Returns:
+        Generator[Session, None, None]: Sesión de base de datos.
+    """
     db: Session = SessionLocal()
     try:
         yield db
@@ -18,7 +25,16 @@ def get_db() -> Generator[Session, None, None]:
 
 @router.post("/", response_model=OrdenOut)
 def crear_orden(orden: OrdenCreate, db: Session = Depends(get_db)) -> model_orden.Orden:
-    # Validar que la orden tenga al menos un producto
+    """
+    Crea una nueva orden en la base de datos.
+
+    Args:
+        orden (OrdenCreate): Datos de la orden a crear.
+        db (Session): Sesión de base de datos.
+
+    Returns:
+        model_orden.Orden: La orden creada.
+    """
     if not orden.detalles or len(orden.detalles) == 0:
         raise HTTPException(
             status_code=400, detail="No se puede crear una orden sin productos."
@@ -58,6 +74,15 @@ def crear_orden(orden: OrdenCreate, db: Session = Depends(get_db)) -> model_orde
 
 @router.get("/", response_model=List[OrdenOut])
 def listar_ordenes(db: Session = Depends(get_db)) -> List[model_orden.Orden]:
+    """
+    Lista todas las órdenes en la base de datos.
+
+    Args:
+        db (Session): Sesión de base de datos.
+
+    Returns:
+        List[model_orden.Orden]: Lista de órdenes.
+    """
     ordenes: List[model_orden.Orden] = db.query(model_orden.Orden).all()
     for orden in ordenes:
         orden.detalles  # Cargar detalles de la orden
@@ -65,6 +90,16 @@ def listar_ordenes(db: Session = Depends(get_db)) -> List[model_orden.Orden]:
 
 @router.get("/{orden_id}", response_model=OrdenOut)
 def obtener_orden(orden_id: int, db: Session = Depends(get_db)) -> model_orden.Orden:
+    """
+    Obtiene una orden específica por su ID.
+
+    Args:
+        orden_id (int): ID de la orden.
+        db (Session): Sesión de base de datos.
+
+    Returns:
+        model_orden.Orden: La orden encontrada.
+    """
     orden: model_orden.Orden = db.query(model_orden.Orden).filter(model_orden.Orden.id == orden_id).first()
     if not orden:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Orden no encontrada")
@@ -72,6 +107,16 @@ def obtener_orden(orden_id: int, db: Session = Depends(get_db)) -> model_orden.O
 
 @router.delete("/{orden_id}", status_code=204)
 def eliminar_orden(orden_id: int, db: Session = Depends(get_db)) -> None:
+    """
+    Elimina una orden por su ID.
+
+    Args:
+        orden_id (int): ID de la orden a eliminar.
+        db (Session): Sesión de base de datos.
+
+    Returns:
+        None
+    """
     orden: model_orden.Orden = db.query(model_orden.Orden).filter(model_orden.Orden.id == orden_id).first()
     if not orden:
         raise HTTPException(status_code=404, detail="Orden no encontrada")
@@ -87,11 +132,21 @@ def eliminar_orden(orden_id: int, db: Session = Depends(get_db)) -> None:
 
 @router.put("/{orden_id}", response_model=OrdenOut)
 def actualizar_orden(orden_id: int, nueva_orden: OrdenCreate, db: Session = Depends(get_db)) -> model_orden.Orden:
+    """
+    Actualiza una orden existente.
+
+    Args:
+        orden_id (int): ID de la orden a actualizar.
+        nueva_orden (OrdenCreate): Datos actualizados de la orden.
+        db (Session): Sesión de base de datos.
+
+    Returns:
+        model_orden.Orden: La orden actualizada.
+    """
     orden: model_orden.Orden = db.query(model_orden.Orden).filter(model_orden.Orden.id == orden_id).first()
     if not orden:
         raise HTTPException(status_code=404, detail="Orden no encontrada")
 
-    # Revertir el stock de los productos y eliminar los detalles existentes
     for detalle in orden.detalles:
         producto: model_producto.Producto = db.query(model_producto.Producto).filter(model_producto.Producto.id == detalle.producto_id).first()
         if producto:
@@ -107,7 +162,6 @@ def actualizar_orden(orden_id: int, nueva_orden: OrdenCreate, db: Session = Depe
         if producto.cantidad_disponible < d.cantidad:
             raise HTTPException(status_code=400, detail="Stock insuficiente")
 
-        # Actualizar el precio unitario del producto si se proporciona en la solicitud
         if d.precio_unitario is not None and d.precio_unitario >= 0:
             producto.precio_unitario = d.precio_unitario
 

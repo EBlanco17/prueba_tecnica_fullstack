@@ -6,7 +6,17 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from app.core.database import SessionLocal
 from app.models.producto import Producto
 
+"""
+Este script se utiliza para cargar productos iniciales en la base de datos.
+Es útil para poblar la base de datos con datos de prueba o configuración inicial.
+"""
+
 def cargar_productos():
+    """
+    Inserta una lista de productos predefinidos en la base de datos.
+
+    Los productos incluyen atributos como nombre, cantidad disponible y precio unitario.
+    """
     db = SessionLocal()
     productos = [
         Producto(nombre="Teclado mecánico", cantidad_disponible=17, precio_unitario=120.50),
@@ -22,4 +32,3 @@ def cargar_productos():
 
 if __name__ == "__main__":
     cargar_productos()
-    
