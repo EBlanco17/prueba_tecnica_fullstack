@@ -10,7 +10,7 @@ from app.models import detalle_orden as model_detalle
 client: TestClient = TestClient(app)
 
 @pytest.fixture
-def setup_db() -> None:
+def setup_db() -> None: # type: ignore
     """Fixture para configurar la base de datos antes de las pruebas."""
     db: Session = SessionLocal()
     # Crear productos de prueba
