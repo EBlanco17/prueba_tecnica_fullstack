@@ -17,6 +17,11 @@ def get_db():
     finally:
         db.close()
 
+@router.get("/")
+def obtener_productos(db: Session = Depends(get_db)):
+    productos = db.query(Producto).all()
+    return productos
+
 @router.get("/top3", response_model=list[ProductoTopOut])
 def obtener_top_3(db: Session = Depends(get_db)):
     resultados = (
