@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import OrderList from "./pages/OrderList";
 import CreateOrder from "./pages/CreateOrder";
+import OrderDetail from "./pages/OrderDetail";
 
 const App: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<OrderList />} />
           <Route path="/create-order" element={<CreateOrder />} />
+          <Route path="/orders/:orderId" element={<OrderDetail />} />
         </Routes>
       </div>
     </Router>
