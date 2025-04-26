@@ -78,3 +78,43 @@ def eliminar_orden(orden_id: int, db: Session = Depends(get_db)):
     db.commit()
     return
 
+@router.put("/{orden_id}", response_model=OrdenOut)
+def actualizar_orden(orden_id: int, nueva_orden: OrdenCreate, db: Session = Depends(get_db)):
+    orden = db.query(model_orden.Orden).filter(model_orden.Orden.id == orden_id).first()
+    if not orden:
+        raise HTTPException(status_code=404, detail="Orden no encontrada")
+
+    
+    for detalle in orden.detalles:
+        producto = db.query(model_producto.Producto).filter(model_producto.Producto.id == detalle.producto_id).first()
+        if producto:
+            producto.cantidad_disponible += detalle.cantidad
+        db.delete(detalle)
+
+    
+    total = 0
+    nuevos_detalles = []
+    for d in nueva_orden.detalles:
+        producto = db.query(model_producto.Producto).filter(model_producto.Producto.id == d.producto_id).first()
+        if not producto:
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
+        if producto.cantidad_disponible < d.cantidad:
+            raise HTTPException(status_code=400, detail="Stock insuficiente")
+
+        producto.cantidad_disponible -= d.cantidad
+        subtotal = d.cantidad * producto.precio_unitario
+        nuevo_detalle = model_detalle.DetalleOrden(
+            orden_id=orden.id,
+            producto_id=d.producto_id,
+            cantidad=d.cantidad,
+            precio_unitario=producto.precio_unitario,
+            subtotal=subtotal
+        )
+        nuevos_detalles.append(nuevo_detalle)
+        total += subtotal
+        db.add(nuevo_detalle)
+
+    orden.total = total
+    db.commit()
+    db.refresh(orden)
+    return orden
