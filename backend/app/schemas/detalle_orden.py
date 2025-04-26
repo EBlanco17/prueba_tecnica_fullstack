@@ -12,5 +12,5 @@ class DetalleOrdenOut(DetalleOrdenBase):
     precio_unitario: float
     subtotal: float
 
-class Config:
-    orm_mode = True
+    class Config:
+        from_attributes = True

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 class DetalleOrdenCreate(BaseModel):
@@ -17,8 +17,7 @@ class DetalleOrdenOut(BaseModel):
     precio_unitario: float
     subtotal: float
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)  
 
 class OrdenOut(BaseModel):
     id: int
@@ -26,5 +25,4 @@ class OrdenOut(BaseModel):
     total: float
     detalles: List[DetalleOrdenOut]
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)  

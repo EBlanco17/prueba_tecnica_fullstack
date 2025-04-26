@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 class ProductoBase(BaseModel):
     nombre: str
@@ -11,9 +11,10 @@ class ProductoCreate(ProductoBase):
 class ProductoOut(ProductoBase):
     id: int
 
-class Config:
-    orm_mode = True
+    model_config = ConfigDict(from_attributes=True)  
 
 class ProductoTopOut(BaseModel):
     nombre: str
     total_comprado: int
+
+    model_config = ConfigDict(from_attributes=True)  
