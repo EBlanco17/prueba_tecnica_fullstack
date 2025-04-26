@@ -84,14 +84,13 @@ def actualizar_orden(orden_id: int, nueva_orden: OrdenCreate, db: Session = Depe
     if not orden:
         raise HTTPException(status_code=404, detail="Orden no encontrada")
 
-    
+    # Revertir el stock de los productos y eliminar los detalles existentes
     for detalle in orden.detalles:
         producto = db.query(model_producto.Producto).filter(model_producto.Producto.id == detalle.producto_id).first()
         if producto:
             producto.cantidad_disponible += detalle.cantidad
         db.delete(detalle)
 
-    
     total = 0
     nuevos_detalles = []
     for d in nueva_orden.detalles:
@@ -100,6 +99,10 @@ def actualizar_orden(orden_id: int, nueva_orden: OrdenCreate, db: Session = Depe
             raise HTTPException(status_code=404, detail="Producto no encontrado")
         if producto.cantidad_disponible < d.cantidad:
             raise HTTPException(status_code=400, detail="Stock insuficiente")
+
+        # Actualizar el precio unitario del producto si se proporciona en la solicitud
+        if d.precio_unitario is not None and d.precio_unitario >= 0:
+            producto.precio_unitario = d.precio_unitario
 
         producto.cantidad_disponible -= d.cantidad
         subtotal = d.cantidad * producto.precio_unitario
