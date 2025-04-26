@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Producto } from "../services/productService";
 
+/**
+ * Componente para mostrar una lista de productos disponibles y permitir al usuario
+ * agregar productos a su orden.
+ * @param {Object} props - Props del componente.
+ * @param {Producto[]} props.products - Lista de productos disponibles.
+ * @param {function} props.onAddProduct - Función para manejar la adición de un producto a la orden.
+ * @returns {JSX.Element} El componente ProductList.
+ */
 const ProductList: React.FC<{
   products: Producto[];
   onAddProduct: (product: Producto, quantity: number) => void;

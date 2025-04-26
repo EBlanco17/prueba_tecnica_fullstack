@@ -10,6 +10,10 @@ import {
 } from "../services/orderService";
 import { getAllProducts, Producto } from "../services/productService";
 
+/**
+ * Vista para editar una orden existente.
+ * @returns {JSX.Element} La vista EditOrder.
+ */
 const EditOrder: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const [selectedProducts, setSelectedProducts] = useState<

@@ -4,6 +4,7 @@ import OrderList from "./pages/OrderList";
 import CreateOrder from "./pages/CreateOrder";
 import EditOrder from "./pages/EditOrder";
 import OrderDetail from "./pages/OrderDetail";
+import TopProducts from "./pages/TopProducts";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
           <Route path="/create-order" element={<CreateOrder />} />
           <Route path="/orders/:orderId" element={<OrderDetail />} />
           <Route path="/edit-order/:orderId" element={<EditOrder />} />
+          <Route path="/top-products" element={<TopProducts />} />
         </Routes>
       </div>
     </Router>

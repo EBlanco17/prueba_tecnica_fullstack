@@ -7,6 +7,10 @@ import ValidationError from "../components/ValidationError";
 import { createOrder } from "../services/orderService";
 import { getAllProducts, Producto } from "../services/productService";
 
+/**
+ * Vista para crear una nueva orden.
+ * @returns {JSX.Element} La vista CreateOrder.
+ */
 const CreateOrder: React.FC = () => {
   const [products, setProducts] = useState<Producto[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<

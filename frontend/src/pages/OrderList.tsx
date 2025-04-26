@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { getOrders, OrdenOut } from "../services/orderService";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Vista para mostrar la lista de órdenes.
+ * @returns {JSX.Element} La vista OrderList.
+ */
 const OrderList: React.FC = () => {
   const [orders, setOrders] = useState<OrdenOut[]>([]);
   const navigate = useNavigate();

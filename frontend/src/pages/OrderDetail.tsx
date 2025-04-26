@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getOrderById, OrdenOut } from "../services/orderService";
 
+/**
+ * Vista para mostrar los detalles de una orden específica.
+ * @returns {JSX.Element} La vista OrderDetail.
+ */
 const OrderDetail: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const [order, setOrder] = useState<OrdenOut | null>(null);
