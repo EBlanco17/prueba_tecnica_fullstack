@@ -17,6 +17,12 @@ def get_db():
 
 @router.post("/", response_model=OrdenOut)
 def crear_orden(orden: OrdenCreate, db: Session = Depends(get_db)):
+    # Validar que la orden tenga al menos un producto
+    if not orden.detalles or len(orden.detalles) == 0:
+        raise HTTPException(
+            status_code=400, detail="No se puede crear una orden sin productos."
+        )
+
     total = 0
     nueva_orden = model_orden.Orden(total=0)
     db.add(nueva_orden)

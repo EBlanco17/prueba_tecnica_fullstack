@@ -140,10 +140,16 @@ const CreateOrder: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
+      if (selectedProducts.length === 0) {
+        setError("No puedes crear una orden sin productos.");
+        return;
+      }
+
       const orderDetails = selectedProducts.map((product) => ({
         producto_id: product.id,
         cantidad: product.quantity,
       }));
+
       await createOrder({ detalles: orderDetails });
       alert("Orden creada exitosamente");
       navigate("/");
