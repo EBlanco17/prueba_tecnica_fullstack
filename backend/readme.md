@@ -23,7 +23,6 @@ Antes de instalar las dependencias, configura un entorno virtual. Sigue los paso
    ```bash
    .\env\Scripts\activate
    ```
-3. Instala `wkhtmltopdf` desde [wkhtmltopdf.org](https://wkhtmltopdf.org/), ya que es necesario para la generación de PDFs.
 
 ### En Linux o macOS
 
@@ -35,14 +34,22 @@ Antes de instalar las dependencias, configura un entorno virtual. Sigue los paso
    ```bash
    source env/bin/activate
    ```
+   Deberia verse de esta forma:
+   ```
+   (env) user-notebook:~/Documents/prueba_tecnica_fullstack/backend$
+   ```
 
 ## Instalación de Dependencias
+
+## Instala `wkhtmltopdf` desde [wkhtmltopdf.org](https://wkhtmltopdf.org/), ya que es necesario para la generación de PDFs ya sea para Windows o alguna versión de linux o Mac.
 
 Una vez configurado el entorno virtual, instala las dependencias necesarias ejecutando:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+Para comprobar que se instaló correctamente deberia haber una carpeta llamada `env/lib/python3.12/site-packages` y dentro todas las dependencias.
 
 ## Configuración del Archivo `.env`
 
@@ -71,7 +78,7 @@ uvicorn app.main:app --reload
 Con el servidor en ejecución, ejecuta el siguiente script para llenar la tabla de productos:
 
 ```bash
-python scripts/cargar_productos.py
+python app/scripts/cargar_productos.py
 ```
 
 Este script cargará datos iniciales en la base de datos, modifique si lo desea por sus propios productos.
@@ -94,6 +101,8 @@ pytest
 ```
 
 Tener en cuenta que si se ejecutan las pruebas sin haber ejecutado el proyecto, se generará un error de conexión a la base de datos. Para evitar esto, asegúrate de ejecutar el servidor por lo menos una vez antes.
+
+⚠️**Advertencia:** La base de datos se limpiara completamente al finalizar los tests.
 
 ## Estructura de Carpetas
 
@@ -138,3 +147,5 @@ Cada carpeta y archivo tiene un propósito específico:
 - `.env.example`: Archivo de ejemplo para configuración de variables de entorno.
 - `requirements.txt`: Lista de dependencias necesarias para el proyecto.
 - `readme.md`: Documentación del proyecto.
+  readme.md
+  Mostrando readme.md.
